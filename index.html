@@ -1,28 +1,89 @@
-Hello World
+  <div id="BotChatGoesHere"></div>
+<script  type="text/JavaScript" src={{asset 'botchat.js'}}></script>
+<script type="text/JavaScript">
 
-<form id="uploadForm" action="https://script.google.com/macros/s/AKfycbxjHgRjVjb2liRWUJe5iztu5g0SUloImg9_h331f12xlMv6UAI/exec" method="POST">
-  <input type="hidden" value="" name="fileContent" id="fileContent">
-  <input type="hidden" value="" name="filename" id="filename">
-  
-  <label> Name : </label><input required type="text" value="" name="name" id="name">
-  <label> Email :</label> <input required type="text" value="" name="email" id="email">  
-  <label> Contact : </label><input required type="text" value="" name="contact" id="contact">
-  <label> SkillSets :</label> <input required type="text" value="" name="skillsets" id="skillsets">
-  <label> LinkedIn Account:</label><input type="text" value="" name="linkedinUrl" id="linkedinUrl">   
-  
-</form>
-<input required id="attach" name="attach" type="file"/>
-<input value="Submit" type="button" onclick="UploadFile();" />
+	/*
+	 *1. default language properties. As for one language bot, cofigure these.
+	 */
 
-<script>
-function UploadFile() {
-  var reader = new FileReader();
-  var file = document.getElementById('attach').files[0];
-  reader.onload = function(){
-    document.getElementById('fileContent').value=reader.result;
-	document.getElementById('filename').value=file.name;
-    document.getElementById('uploadForm').submit();
-  }
-  reader.readAsDataURL(file);
-}
+    var webClientApi = {
+        domain: "https://stg.gateway-api.global.rakuten.com/bot/web/v3/api",
+        secret: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGllbnRJZCI6ImtvYm9fY2FuYWRhIiwiZW52aXJvbm1lbnQiOiJzdGFnaW5nIn0.hviAI-BSeWQvlNsilwoJFB2y9GMyd5zJ6svikmEfV7M',
+        uiSdkWlcmMsgEnabled: false  // トピックありの場合、必ずfalseを設定ください。trueの場合UISDKが起動できません。
+    };
+
+    var session = {
+        enabled: false,
+        duration: 60,
+        urls: []
+    }
+
+    var suggestionApi = {
+        domain: 'https://stg.gateway-api.global.rakuten.com/bot/suggestion',
+        target: 'YOUR_TARGET',
+		enabled: true,
+        interval: 500
+    };
+
+    var defaultLocale = 'en-US';
+
+    var topicsEnabled = false;
+
+    var ui = {
+        headerTitle: "Insert text here MINERVA",
+        sendBtnName: "Send",
+        placeholder: "Please enter your question",
+        inputMaxLength: 700,    // for message input form
+        backToCategoriesLabel: "Return to inquriy topic selection",
+        minimizeHelpButton: false,
+        verticalSuggestions: false
+    };
+
+    var msg={
+        WELCOME:'WELCOME',
+        ERR_400:'Customization error message ERR_400',
+        ERR_401:'Customization error message ERR_401',
+        ERR_403:'Customization error message ERR_403',
+        ERR_404:'Customization error message ERR_404',
+        ERR_409:'Customization error message ERR_409',
+        ERR_429:'Customization error message ERR_429',
+        ERR_500:'Customization error message ERR_500',
+        ERR_502:'Customization error message ERR_502',
+        ERR_503:'Customization error message ERR_503',
+        ERR_NW:'Customization error message ERR_NW'
+    };
+
+    var operator = {
+        uiSdkResEnabled:true,
+        menuTitle:'オペレーターとチャット',
+        responseMsg:'以下のページよりお問い合わせください。[メールでお問い合わせする](http://www.rakuten.co.jp/ "direct")',
+        sendMsg:'オペレーターとチャットする'
+    }
+    var mail = {
+        uiSdkResEnabled:true,
+        menuTitle:'メールでお問い合わせ',
+        responseMsg:'以下のページよりお問い合わせください。[メールでお問い合わせする](mailto:sample@mail.rakuten.com "direct") ',
+        sendMsg:'メールでお問い合わせ'
+    }
+    var tel = {
+        uiSdkResEnabled:true,
+        menuTitle:'電話でお問い合わせ',
+        responseMsg:'以下のページよりお問い合わせください。[電話でお問い合わせする](http://www.rakuten.co.jp/ "direct") ',
+        sendMsg:'電話でお問い合わせ'
+    }
+
+    BotChat.App({
+        webClientApi:webClientApi,
+        session: session,
+        suggestionApi: suggestionApi,
+        msg: msg,
+        ui: ui,
+        operator:operator,
+        mail:mail,
+        tel:tel,
+        defaultLocale: defaultLocale,
+        topicsEnabled: topicsEnabled
+    }, document.getElementById('BotChatGoesHere'));
+
+  $('.min_dialog.minDialogId').prepend('<a href="javascript:void($zopim.livechat.say("Overdrive problem, I have already tried to sign it"))">I would like to chat to an agent</a>');
 </script>
